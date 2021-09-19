@@ -1,0 +1,22 @@
+{
+  "name": "node-practice",
+  "version": "1.0.0",
+  "description": "Hello Node World! ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somerongit/node-example.git"
+  },
+  "author": "Someron Bakuli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/somerongit/node-example/issues"
+  },
+  "homepage": "https://github.com/somerongit/node-example#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
