@@ -1,21 +1,25 @@
-const rect=require("./rectangle");
+const express = require('express'),
+     http = require('http');
+const morgan = require('morgan');
+const hostname = 'localhost';
+const port = 3000;
 
-function solveRect(l,b) {
-    console.info("\nSolving for rectangle with l= "+l+" and b = "+b);
-    rect(l,b, (err, rectangle)=>{
-        if(err){
-            console.log("\nError: ",err.message);
-        }else{
-            console.log("\nThe area of the rectangle of dimesions L: "
-            +l+" and B: "+b+" is:"+rectangle.area());
-            console.log("The perimeter of the rectangle of dimesions L: "
-            +l+" and B: "+b+" is:"+rectangle.perimeter());
-        }
-    });
-    console.log("This satemet is after call of rect");
-}
+const app = express();
 
-solveRect(2,4);
-solveRect(3,5);
-solveRect(0,5);
-solveRect(-3,5);
+app.use(morgan('dev'));
+
+app.use(express.static(__dirname + '/public'));
+
+app.use((req, res, next) => {
+  console.log(req.headers);
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html');
+  res.end('<html><body><h1>This is an Express Server</h1></body></html>');
+
+});
+
+const server = http.createServer(app);
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
