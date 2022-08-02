@@ -1,42 +1,134 @@
-/* Graphs: Breadth-first search */
+/* Heaps */
 
-function bfs(graph, root) {
-    var nodesLen = {};
-    
-    for (var i = 0; i < graph.length; i++) {
-      nodesLen[i] = Infinity;
-    }
-    nodesLen[root] = 0; 
-    
-    var queue = [root]; 
-    var current; 
+// left child: i * 2
+// right child: i * 2 + 1
+// parent: i / 2
+
+let MinHeap = function() {
+	
+	let heap = [null];
+	
+	this.insert = function(num) {
+		heap.push(num);
+		if (heap.length > 2) {
+			let idx = heap.length - 1;
+			while (heap[idx] < heap[Math.floor(idx/2)]) {
+				if (idx >= 1) {
+					[heap[Math.floor(idx/2)], heap[idx]] = [heap[idx], heap[Math.floor(idx/2)]];
+					if (Math.floor(idx/2) > 1) {
+						idx = Math.floor(idx/2);
+					} else {
+						break;
+					};
+				};
+			};
+		};
+	};
+	
+	this.remove = function() {
+		let smallest = heap[1];
+		if (heap.length > 2) {
+			heap[1] = heap[heap.length - 1];
+			heap.splice(heap.length - 1);
+			if (heap.length == 3) {
+				if (heap[1] > heap[2]) {
+					[heap[1], heap[2]] = [heap[2], heap[1]];
+				};
+				return smallest;
+			};
+			let i = 1;
+			let left = 2 * i;
+			let right = 2 * i + 1;
+			while (heap[i] >= heap[left] || heap[i] >= heap[right]) {
+				if (heap[left] < heap[right]) {
+					[heap[i], heap[left]] = [heap[left], heap[i]];
+					i = 2 * i
+				} else {
+					[heap[i], heap[right]] = [heap[right], heap[i]];
+					i = 2 * i + 1;
+				};
+				left = 2 * i;
+				right = 2 * i + 1;
+				if (heap[left] == undefined || heap[right] == undefined) {
+					break;
+				};
+			};
+		} else if (heap.length == 2) {
+			heap.splice(1, 1);
+		} else {
+			return null;
+		};
+		return smallest;
+	};
   
-    while (queue.length != 0) {
-      current = queue.shift();
-      
-      var curConnected = graph[current];
-      var neighborIdx = []; 
-      var idx = curConnected.indexOf(1); 
-      while (idx != -1) {
-        neighborIdx.push(idx); 
-        idx = curConnected.indexOf(1, idx + 1); 
-      }
-      
-      for (var j = 0; j < neighborIdx.length; j++) {
-        if (nodesLen[neighborIdx[j]] == Infinity) {
-          nodesLen[neighborIdx[j]] = nodesLen[current] + 1;
-          queue.push(neighborIdx[j]); 
-        }
-      }
-    }
-    return nodesLen;
-  };
-  
-  var exBFSGraph = [
-    [0, 1, 1, 1, 0],
-    [0, 0, 1, 0, 0],
-    [1, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0]
-  ];
-  console.log(bfs(exBFSGraph, 1));
+	this.sort = function() {
+		let result = new Array();
+		while (heap.length > 1) {
+			result.push(this.remove());
+		};
+		return result;
+	};
+
+};
+
+let MaxHeap = function() {
+	
+	let heap = [null];
+	
+	this.print = () => heap;
+
+	this.insert = function(num) {
+		heap.push(num);
+		if (heap.length > 2) {
+			let idx = heap.length - 1;
+			while (heap[idx] > heap[Math.floor(idx/2)]) {
+				if (idx >= 1) {
+					[heap[Math.floor(idx/2)], heap[idx]] = [heap[idx], heap[Math.floor(idx/2)]];
+					if (Math.floor(idx/2) > 1) {
+						idx = Math.floor(idx/2);
+					} else {
+						break;
+					};
+				};
+			};
+		};
+	};
+	
+	this.remove = function() {
+		let smallest = heap[1];
+		if (heap.length > 2) {
+			heap[1] = heap[heap.length - 1];
+			heap.splice(heap.length - 1);
+			if (heap.length == 3) {
+				if (heap[1] < heap[2]) {
+					[heap[1], heap[2]] = [heap[2], heap[1]];
+				};
+				return smallest;
+			};
+			let i = 1;
+			let left = 2 * i;
+			let right = 2 * i + 1;
+			while (heap[i] <= heap[left] || heap[i] <= heap[right]) {
+				if (heap[left] > heap[right]) {
+					[heap[i], heap[left]] = [heap[left], heap[i]];
+					i = 2 * i
+				} else {
+					[heap[i], heap[right]] = [heap[right], heap[i]];
+					i = 2 * i + 1;
+				};
+				left = 2 * i;
+				right = 2 * i + 1;
+				if (heap[left] == undefined || heap[right] == undefined) {
+					break;
+				};
+			};
+		} else if (heap.length == 2) {
+			heap.splice(1, 1);
+		} else {
+			return null;
+		};
+		return smallest;
+	};
+
+};
+
